@@ -4,20 +4,28 @@ from doutline.outline import OutlineNode
 
 
 def render_markdown(
-    outline: OutlineNode[str],
+    node: OutlineNode[str],
     writer: IO[str],
     hi: Optional[int] = None,
     indent: int = 0,
+    lo: Optional[int] = None,
 ) -> None:
+    """
+    Renders the node to a Markdown fragment.
 
-    prefix = " " * indent
+    Arguments:
+        node:   Node to render.
+        writer: Writer.
+        hi:     Highest level to include.
+        indent: Indent spaces.
+        lo:     Lowest level to include.
+    """
 
-    if outline.data and (
-        hi is None or (outline.level is not None and outline.level >= hi)
-    ):
-        line = f"{prefix}- {outline.data}\n"
+    if node.data and node.in_range(hi, lo):
+        prefix = " " * indent
+        line = f"{prefix}- {node.data}\n"
         writer.write(line)
         indent += 2
 
-    for child in outline.children:
-        render_markdown(outline=child, writer=writer, hi=hi, indent=indent)
+    for child in node.children:
+        render_markdown(child, writer, hi=hi, indent=indent, lo=lo)

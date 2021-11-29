@@ -118,6 +118,35 @@ class OutlineNode(Generic[TData]):
 
         return self._data
 
+    def in_range(self, hi: Optional[int], lo: Optional[int]) -> bool:
+        """
+        Checks if the node is within the specified range of hierarchical levels.
+
+        If the node has no level then it will not match any range.
+
+        Arguments:
+            hi: Highest level to include. `None` implies no upper bound.
+            lo: Lowest level to include. `None` implies no lower bound.
+        """
+
+        if self.level is None:
+            self._logger.debug('Excluding "%s" from range: no level.', self.data)
+            return False
+
+        if hi is not None and hi > self.level:
+            self._logger.debug(
+                'Excluding "%s" from range: level %s < %s.',
+                self.data,
+                self.level,
+                hi,
+            )
+            return False
+
+        if lo is not None and lo < self.level:
+            return False
+
+        return True
+
     @property
     def level(self) -> Optional[int]:
         return self._level

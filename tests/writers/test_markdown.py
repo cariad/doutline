@@ -58,13 +58,11 @@ def test_hi() -> None:
     outline.append(1, "sibling 1")
     outline.append(0, "sibling 0")
     writer = StringIO()
-    render_markdown(outline, writer, hi=1)
+    render_markdown(outline, writer, hi=1, lo=2)
     assert (
         writer.getvalue()
         == """- child 1
   - child 2
-    - child 3
-    - sibling 3
   - sibling 2
 - sibling 1
 """
