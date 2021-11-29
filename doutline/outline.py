@@ -1,132 +1,78 @@
 from logging import getLogger
 from typing import Any, Generic, List, Optional
 
-from doutline.exceptions import LevelNotFoundError, LevelTooHighError, NoLevelIndexError
+from doutline.exceptions import LevelTooHighError, NoLevelError
 from doutline.types import TData
 
 
-class Outline(Generic[TData]):
+class OutlineNode(Generic[TData]):
     """
-    Represents a level of the document's hierarchy within a single branch.
+    Node in an outline.
 
     Arguments:
-        index: Level index. Will be set automatically when appending items if
-        omitted.
+        level: Hierarchical level under parent. Smaller numbers are higher in
+        the hierarchy/towards the root. Larger numbers are lower in the
+        hierarchy/towards leaves. `None` implies this is the root.
 
-        items: Items to preload.
+        data:  Data to assign to this node. `None` implies this is the root.
     """
 
     def __init__(
         self,
-        index: Optional[int] = None,
-        items: Optional[List["OutlineItem[TData]"]] = None,
+        level: Optional[int] = None,
+        data: Optional[TData] = None,
+        children: Optional[List["OutlineNode[TData]"]] = None,
     ) -> None:
-        self._index = index
-        self._items = items or []
         self._logger = getLogger("doutline")
-
-    def __eq__(self, other: Any) -> bool:
-        if not isinstance(other, Outline):
-            self._logger.debug("OutlineLevel equality failed: type mismatch.")
-            return False
-
-        any_other: Outline[Any] = other
-
-        if any_other.index != self.index:
-            self._logger.debug("OutlineLevel equality failed: index mismatch.")
-            return False
-
-        if any_other.items != self.items:
-            self._logger.debug("OutlineLevel equality failed: items mismatch.")
-            return False
-
-        return True
-
-    def append(self, level: int, data: TData) -> None:
-        """
-        Appends an item to the outline.
-
-        Raises:
-            ItemTooHighError: If the new item is too high in the hierarchy to be
-            added in or beneath this level.
-        """
-
-        if self._index is None:
-            self._index = level
-
-        if level < self._index:
-            raise LevelTooHighError(requested=level, host=self._index)
-
-        if self._index == level:
-            self._items.append(OutlineItem[TData](data=data, parent=self))
-            return
-
-        last = self._items[-1]
-        last.append(level=level, data=data)
-
-    @property
-    def index(self) -> int:
-        """
-        Gets this level's index.
-
-        Raises:
-            NoLevelIndexError: If the index has not been set.
-        """
-
-        if self._index is None:
-            raise NoLevelIndexError()
-
-        return self._index
-
-    @property
-    def items(self) -> List["OutlineItem[TData]"]:
-        """
-        Gets this level's items
-        """
-
-        return self._items
-
-
-class OutlineItem(Generic[TData]):
-    """
-    Represents an item and its children within an outline.
-
-    Arguments:
-        data:   Item data.
-
-        levels: Child levels to preload.
-
-        parent: Outline level that this item inhabits. `None` implies the
-        document root.
-    """
-
-    def __init__(
-        self,
-        data: TData,
-        levels: Optional[List[Outline[TData]]] = None,
-        parent: Optional[Outline[TData]] = None,
-    ) -> None:
         self._data = data
-        self._levels = levels or []
-        self._parent = parent
-        self._logger = getLogger("doutline")
+        self._level = level
+        self._children = children or []
 
     def __eq__(self, other: Any) -> bool:
-        if not isinstance(other, OutlineItem):
-            self._logger.debug("OutlineItem equality failed: type mismatch.")
+        if not isinstance(other, OutlineNode):
+            self._logger.debug("%s not equal: type mismatch.", self.__class__.__name__)
             return False
 
-        any_other: OutlineItem[Any] = other
+        any_other: OutlineNode[Any] = other
+
+        if any_other.level != self.level:
+            self._logger.debug(
+                "%s not equal: level %s != %s.",
+                self.__class__.__name__,
+                self.level,
+                any_other.level,
+            )
+            return False
 
         if any_other.data != self.data:
-            self._logger.debug("OutlineItem equality failed: data mismatch.")
+            self._logger.debug("%s not equal: data mismatch.", self.__class__.__name__)
             return False
 
-        if any_other._levels != self._levels:
-            self._logger.debug("OutlineItem equality failed: levels mismatch.")
+        if any_other.children != self.children:
+            self._logger.debug(
+                "%s not equal: children %s != %s.",
+                self.__class__.__name__,
+                self.children,
+                any_other.children,
+            )
             return False
 
         return True
+
+    def __repr__(self) -> str:
+        parts: List[str] = []
+
+        if self.level is not None:
+            parts.append(str(self.level))
+
+        if self.data is not None:
+            parts.append(f'"{self.data}"')
+
+        if self.children:
+            parts.append(f"children={self.children}")
+
+        body = ", ".join(parts)
+        return f"{self.__class__.__name__}({body})"
 
     def append(self, level: int, data: TData) -> None:
         """
@@ -135,44 +81,43 @@ class OutlineItem(Generic[TData]):
         Arguments:
             level: Level to add the item at.
             data:  Item data.
+
+        Raises:
+            LevelTooHighError: If the new item is too high in the hierarchy to
+            be added to or beneath this node.
+
+            NoLevelError: If a child node without a level index is encountered.
         """
 
-        self.get_level(level, create=True).append(level, data)
+        if self.level is not None and level <= self.level:
+            raise LevelTooHighError(self.level, level)
+
+        if not self.children:
+            self.children.append(OutlineNode[TData](level=level, data=data))
+            return
+
+        last = self.children[-1]
+
+        if last.level is None:
+            raise NoLevelError(last)
+
+        if level > last.level:
+            last.append(level=level, data=data)
+        else:
+            self.children.append(OutlineNode[TData](level=level, data=data))
 
     @property
-    def data(self) -> TData:
+    def children(self) -> List["OutlineNode[TData]"]:
+        return self._children
+
+    @property
+    def data(self) -> Optional[TData]:
         """
         Gets the meaningful data associated with this outline item.
         """
 
         return self._data
 
-    def get_level(self, index: int, create: bool = False) -> Outline[TData]:
-        """
-        Gets a child outline level.
-
-        Arguments:
-            index:  Level index.
-            create: Create the level if it doesn't exist.
-
-        Raises:
-            LevelNotFoundError: If the requested level does not exist and will
-            not be created.
-
-            LevelTooHighError: If the requested level is too high to possibly
-            exist as a descendent of this item.
-        """
-
-        if self._parent and index < self._parent.index:
-            raise LevelTooHighError(host=self._parent.index, requested=index)
-
-        for level in self._levels:
-            if level.index == index:
-                return level
-
-        if not create:
-            raise LevelNotFoundError(index)
-
-        level = Outline[TData](index=index)
-        self._levels.append(level)
-        return level
+    @property
+    def level(self) -> Optional[int]:
+        return self._level

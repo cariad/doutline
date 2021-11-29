@@ -1,94 +1,77 @@
 from logging import basicConfig, getLogger
 
-from pytest import fixture, raises
+from pytest import mark, raises
 
-from doutline import Outline, OutlineItem
-from doutline.exceptions import LevelTooHighError, NoLevelIndexError
+from doutline import OutlineNode
+from doutline.exceptions import LevelTooHighError, NoLevelError
 
 basicConfig(level="DEBUG")
 getLogger("doutline").setLevel("DEBUG")
 
 
-@fixture
-def level() -> Outline[str]:
-    return Outline[str]()
-
-
-def test_append__lower_then_higher(level: Outline[str]) -> None:
-    level.append(0, "initial")
-    level.append(2, "lower")
-    level.append(1, "higher")
-    assert level.items == [
-        OutlineItem(
-            "initial",
-            levels=[
-                Outline(index=2, items=[OutlineItem("lower")]),
-                Outline(index=1, items=[OutlineItem("higher")]),
-            ],
-        ),
-    ]
-
-
-def test_append__one(level: Outline[str]) -> None:
-    level.append(0, data="first")
-    assert level.index == 0
-    assert level.items == [
-        OutlineItem("first"),
-    ]
-
-
-def test_append__then_child(level: Outline[str]) -> None:
-    level.append(0, "initial")
-    level.append(1, "child")
-    assert level.index == 0
-    assert level.items == [
-        OutlineItem(
-            "initial",
-            levels=[Outline(index=1, items=[OutlineItem("child")])],
-        ),
-    ]
-
-
-def test_append__too_high(level: Outline[str]) -> None:
-    level.append(1, "initial")
-    with raises(LevelTooHighError) as ex:
-        level.append(0, "too high")
-    assert str(ex.value) == "An item at level 0 cannot be added at or beneath level 1."
-
-
-def test_append__two(level: Outline[str]) -> None:
-    level.append(0, data="first")
-    level.append(0, data="second")
-    assert level.index == 0
-    assert level.items == [
-        OutlineItem("first"),
-        OutlineItem("second"),
-    ]
-
-
-def test_eq__index_mismatch() -> None:
-    assert Outline[str](index=0) != Outline[str](index=1)
-
-
-def test_eq__item_mismatch() -> None:
-    a = Outline[str](index=0)
-    b = Outline[str](index=0)
-    b.append(0, "foo")
+def test_eq__children_mismatch() -> None:
+    a = OutlineNode(0, "foo")
+    b = OutlineNode(0, "foo")
+    b.append(1, "child")
     assert a != b
 
 
-def test_eq__type_mismatch(level: Outline[str]) -> None:
-    assert level != ""
+def test_eq__data_mismatch() -> None:
+    assert OutlineNode(0, "foo") != OutlineNode(0, "bar")
 
 
-def test_index__empty(level: Outline[str]) -> None:
-    with raises(NoLevelIndexError):
-        level.index
+def test_eq__level_mismatch() -> None:
+    assert OutlineNode(0, "foo") != OutlineNode(1, "foo")
 
 
-def test_index__set_in_init() -> None:
-    assert Outline[str](index=0).index == 0
+def test_eq__type_mismatch() -> None:
+    assert OutlineNode(0, "foo") != ""
 
 
-def test_items__empty(level: Outline[str]) -> None:
-    assert len(level.items) == 0
+def test_append() -> None:
+    root = OutlineNode[str]()
+    root.append(0, "0")
+    assert root.children == [
+        OutlineNode(0, "0"),
+    ]
+
+
+def test_append__too_high() -> None:
+    root = OutlineNode[str](1, "root")
+    with raises(LevelTooHighError) as ex:
+        root.append(0, "0")
+    expect = "Cannot add a level 0 node beneath level 1."
+    assert str(ex.value) == expect
+
+
+def test_append__last_has_no_level() -> None:
+    root = OutlineNode[str](children=[OutlineNode[str]()])
+    with raises(NoLevelError) as ex:
+        root.append(0, "0")
+    expect = "OutlineNode has no index: OutlineNode()"
+    assert str(ex.value) == expect
+
+
+@mark.parametrize(
+    "node, expect",
+    [
+        (OutlineNode[str](), "OutlineNode()"),
+        (OutlineNode[str](level=0), "OutlineNode(0)"),
+        (OutlineNode[str](data="foo"), 'OutlineNode("foo")'),
+        (OutlineNode[str](level=0, data="foo"), 'OutlineNode(0, "foo")'),
+        (
+            OutlineNode[str](children=[OutlineNode[str](level=1, data="bar")]),
+            'OutlineNode(children=[OutlineNode(1, "bar")])',
+        ),
+        (
+            OutlineNode[str](
+                level=0,
+                data="foo",
+                children=[OutlineNode[str](level=1, data="bar")],
+            ),
+            'OutlineNode(0, "foo", children=[OutlineNode(1, "bar")])',
+        ),
+    ],
+)
+def test_repr(node: OutlineNode[str], expect: str) -> None:
+    assert repr(node) == expect

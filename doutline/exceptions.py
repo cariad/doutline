@@ -1,13 +1,4 @@
-class LevelNotFoundError(Exception):
-    """
-    Raised when a level is not found.
-
-    Arguments:
-        index: Index of the missing level.
-    """
-
-    def __init__(self, index: int) -> None:
-        super().__init__(f"No level with index {index}.")
+from typing import Any
 
 
 class LevelTooHighError(Exception):
@@ -21,15 +12,13 @@ class LevelTooHighError(Exception):
     """
 
     def __init__(self, host: int, requested: int) -> None:
-        super().__init__(
-            f"An item at level {requested} cannot be added at or beneath level {host}."
-        )
+        super().__init__(f"Cannot add a level {requested} node beneath level {host}.")
 
 
-class NoLevelIndexError(Exception):
+class NoLevelError(Exception):
     """
-    Raised when a level's index is read before it has been set.
+    Raised when an outline node has no level index.
     """
 
-    def __init__(self) -> None:
-        super().__init__("Level has no index.")
+    def __init__(self, node: Any) -> None:
+        super().__init__(f"{node.__class__.__name__} has no index: {node}")
