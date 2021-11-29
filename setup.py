@@ -40,9 +40,11 @@ setup(
     name="doutline",
     packages=[
         "doutline",
+        "doutline.writers",
     ],
     package_data={
         "doutline": ["py.typed"],
+        "doutline.writers": ["py.typed"],
     },
     python_requires=">=3.8",
     url="https://github.com/cariad/doutline",
