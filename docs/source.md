@@ -1,14 +1,14 @@
+---
+author: Cariad Eccleston
+favicon-emoji: 📑
+title: Doutline
+---
+
 # 📑 Doutline
 
 **Doutline** is a Python package for generating document outlines.
 
-- [📑 Doutline](#-doutline)
-  - [Installation](#installation)
-  - [Project](#project)
-    - [Contributing](#contributing)
-    - [Licence](#licence)
-    - [Author](#author)
-    - [Acknowledgements](#acknowledgements)
+<edition value="toc" />
 
 ## Installation
 
