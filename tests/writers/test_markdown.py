@@ -1,17 +1,31 @@
 from io import StringIO
 
+from pytest import mark
+
 from doutline import OutlineNode
-from doutline.writers import render_markdown
+from doutline.writers.markdown import make_anchor, render_markdown
 
 
-def test_empty() -> None:
+@mark.parametrize(
+    "value, expect",
+    [
+        ("foo", "foo"),
+        ("🍕 Pizza", "-pizza"),
+        ("gem _and_ gemmy", "gem-and-gemmy"),
+    ],
+)
+def test_make_anchor(value: str, expect: str) -> None:
+    assert make_anchor(value) == expect
+
+
+def test_render_markdown_empty() -> None:
     outline = OutlineNode[str]()
     writer = StringIO()
     render_markdown(outline, writer)
     assert writer.getvalue() == ""
 
 
-def test_one() -> None:
+def test_render_markdown_one() -> None:
     outline = OutlineNode[str]()
     outline.append(0, "root")
     writer = StringIO()
@@ -19,7 +33,7 @@ def test_one() -> None:
     assert writer.getvalue() == "- root\n"
 
 
-def test_root_sibling() -> None:
+def test_render_markdown_root_sibling() -> None:
     outline = OutlineNode[str]()
     outline.append(0, "root")
     outline.append(0, "sibling")
@@ -28,7 +42,7 @@ def test_root_sibling() -> None:
     assert writer.getvalue() == "- root\n- sibling\n"
 
 
-def test_root_child() -> None:
+def test_render_markdown_root_child() -> None:
     outline = OutlineNode[str]()
     outline.append(0, "root")
     outline.append(1, "child")
@@ -37,7 +51,16 @@ def test_root_child() -> None:
     assert writer.getvalue() == "- root\n  - child\n"
 
 
-def test_root_child_and_sibling() -> None:
+def test_render_markdown_root_child_hyperlinks() -> None:
+    outline = OutlineNode[str]()
+    outline.append(0, "root")
+    outline.append(1, "child")
+    writer = StringIO()
+    render_markdown(outline, writer, hyperlinks=True)
+    assert writer.getvalue() == "- [root](#root)\n  - [child](#child)\n"
+
+
+def test_render_markdown_root_child_and_sibling() -> None:
     outline = OutlineNode[str]()
     outline.append(0, "root")
     outline.append(1, "child")
@@ -47,7 +70,7 @@ def test_root_child_and_sibling() -> None:
     assert writer.getvalue() == "- root\n  - child\n- sibling\n"
 
 
-def test_hi() -> None:
+def test_render_markdown_ranged() -> None:
     outline = OutlineNode[str]()
     outline.append(0, "root")
     outline.append(1, "child 1")
