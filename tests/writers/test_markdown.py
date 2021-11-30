@@ -3,7 +3,8 @@ from io import StringIO
 from pytest import mark
 
 from doutline import OutlineNode
-from doutline.writers.markdown import make_anchor, render_markdown
+from doutline.writers import render_markdown
+from doutline.writers.utils import make_anchor
 
 
 @mark.parametrize(
