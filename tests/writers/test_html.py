@@ -16,7 +16,7 @@ def test_render_html__one() -> None:
     outline.append(0, "root")
     writer = StringIO()
     render_html(outline, writer)
-    assert writer.getvalue() == '<nav class="toc"><ul><li>root</li></ul></nav>'
+    assert writer.getvalue() == '<nav class="toc"><ol><li>root</li></ol></nav>'
 
 
 def test_render_html__root_sibling() -> None:
@@ -27,7 +27,7 @@ def test_render_html__root_sibling() -> None:
     render_html(outline, writer)
     assert (
         writer.getvalue()
-        == '<nav class="toc"><ul><li>root</li><li>sibling</li></ul></nav>'
+        == '<nav class="toc"><ol><li>root</li><li>sibling</li></ol></nav>'
     )
 
 
@@ -39,7 +39,7 @@ def test_render_html__root_child() -> None:
     render_html(outline, writer)
     assert (
         writer.getvalue()
-        == '<nav class="toc"><ul><li>root<ul><li>child</li></ul></li></ul></nav>'
+        == '<nav class="toc"><ol><li>root<ol><li>child</li></ol></li></ol></nav>'
     )
 
 
@@ -51,7 +51,7 @@ def test_render_html__root_child_hyperlinks() -> None:
     render_html(outline, writer, hyperlinks=True)
     assert (
         writer.getvalue()
-        == '<nav class="toc"><ul><li><a href="#root">root</a><ul><li><a href="#child">child</a></li></ul></li></ul></nav>'
+        == '<nav class="toc"><ol><li><a href="#root">root</a><ol><li><a href="#child">child</a></li></ol></li></ol></nav>'
     )
 
 
@@ -64,7 +64,7 @@ def test_render_html__root_child_and_sibling() -> None:
     render_html(outline, writer)
     assert (
         writer.getvalue()
-        == '<nav class="toc"><ul><li>root<ul><li>child</li></ul></li><li>sibling</li></ul></nav>'
+        == '<nav class="toc"><ol><li>root<ol><li>child</li></ol></li><li>sibling</li></ol></nav>'
     )
 
 
@@ -82,5 +82,5 @@ def test_render_markdown_ranged() -> None:
     render_html(outline, writer, hi=1, lo=2)
     assert (
         writer.getvalue()
-        == '<nav class="toc"><ul><li>child 1<ul><li>child 2</li><li>sibling 2</li></ul></li><li>sibling 1</li></ul></nav>'
+        == '<nav class="toc"><ol><li>child 1<ol><li>child 2</li><li>sibling 2</li></ol></li><li>sibling 1</li></ol></nav>'
     )

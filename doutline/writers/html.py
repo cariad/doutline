@@ -55,13 +55,13 @@ def render_html(
         wrote_any_children = wrote_any_children or inner_result.wrote_line
 
     if child_writer.getvalue():
-        write_ul = not child_writer.getvalue().startswith("<ul>")
+        write_ul = not child_writer.getvalue().startswith("<ol>")
         if write_ul:
             logger.debug("Writing UL because: %s", child_writer.getvalue())
-            inner_writer.write("<ul>")
+            inner_writer.write("<ol>")
         inner_writer.write(child_writer.getvalue())
         if write_ul:
-            inner_writer.write("</ul>")
+            inner_writer.write("</ol>")
 
     if line is not None:
         inner_writer.write("</li>")
