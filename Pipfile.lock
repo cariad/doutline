@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "572b19236ce157e71d4d1babd5c5d6fe75ae0c938ebe4fe0a0e9aa17ba436da2"
+            "sha256": "18d7d6cfe1a5fd7e7773d9e61792717992317ba3dc40fdbd986e26fd07239276"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -143,10 +143,10 @@
         },
         "comprehemd": {
             "hashes": [
-                "sha256:fb562f607be5d117c8e1912ba8079496e37e6f84960b6ebcaa9592e2d6a13f36"
+                "sha256:a4c0a4a3c3efe79cd2a5adbfe952f0eb8e547b7e6ddc82d4a5f77fcb0a18fe74"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.0.0a2"
+            "version": "==1.0.0a4"
         },
         "coverage": {
             "extras": [
@@ -233,10 +233,10 @@
         },
         "dinject": {
             "hashes": [
-                "sha256:c1ded31487eb3ad89c1d31325e6706679c10ee5f383d9f08124dcdc3cce82c93"
+                "sha256:9e28fdd376191106e1cb0450d76ec8b79c453d26cffba8aade3fc08202ce2a83"
             ],
             "markers": "python_version >= '3.8'",
-            "version": "==1.3.0a1"
+            "version": "==1.3.0a4"
         },
         "docutils": {
             "hashes": [
@@ -246,12 +246,19 @@
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "version": "==0.18.1"
         },
+        "doutline": {
+            "hashes": [
+                "sha256:cfe938f54d4fb7bf248690f02ef59cfad6255d930ae7c22c41b5eb21dda605c8"
+            ],
+            "markers": "python_version >= '3.8'",
+            "version": "==1.0.0a3"
+        },
         "edition": {
             "hashes": [
-                "sha256:f8e94159976e2ac9285d0b65e3a5e63125278b06b05068f0817cd9ac43fb034b"
+                "sha256:0e6b12201b3e6c261b794283cf50c294345f57d4d439a95aef1f3411a660fbd7"
             ],
             "index": "pypi",
-            "version": "==1.0.0a11"
+            "version": "==1.0.0a14"
         },
         "flake8": {
             "hashes": [
@@ -383,10 +390,10 @@
         },
         "pkginfo": {
             "hashes": [
-                "sha256:65175ffa2c807220673a41c371573ac9a1ea1b19ffd5eef916278f428319934f",
-                "sha256:bb55a6c017d50f2faea5153abc7b05a750e7ea7ae2cbb7fb3ad6f1dcf8d40988"
+                "sha256:542e0d0b6750e2e21c20179803e40ab50598d8066d51097a0e382cba9eb02bff",
+                "sha256:c24c487c6a7f72c66e816ab1796b96ac6c3d14d49338293d2141664330b55ffc"
             ],
-            "version": "==1.8.1"
+            "version": "==1.8.2"
         },
         "platformdirs": {
             "hashes": [
@@ -679,26 +686,26 @@
         },
         "twine": {
             "hashes": [
-                "sha256:4caad5ef4722e127b3749052fcbffaaf71719b19d4fd4973b29c469957adeba2",
-                "sha256:916070f8ecbd1985ebed5dbb02b9bda9a092882a96d7069d542d4fc0bb5c673c"
+                "sha256:5a3e3fb52b926827c99e050f0c1e5d8ae599848f3eb27764f19b886c09134590",
+                "sha256:8d6a0ad895576c97e9ad4a5da2d6adea37fd5434ecabace0054013d537ddbc6c"
             ],
             "index": "pypi",
-            "version": "==3.6.0"
+            "version": "==3.7.0"
         },
         "typing-extensions": {
             "hashes": [
-                "sha256:2cdf80e4e04866a9b3689a51869016d36db0814d84b8d8a568d22781d45d27ed",
-                "sha256:829704698b22e13ec9eaf959122315eabb370b0884400e9818334d8b677023d9"
+                "sha256:4ca091dea149f945ec56afb48dae714f21e8692ef22a395223bcd328961b6a0e",
+                "sha256:7f001e5ac290a0c0401508864c7ec868be4e701886d5b573a9528ed3973d9d3b"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==4.0.0"
+            "version": "==4.0.1"
         },
         "urllib3": {
             "hashes": [
                 "sha256:4987c65554f7a2dbf30c18fd48778ef124af6fab771a377103da0585e2336ece",
                 "sha256:c4fdf4019605b6e5423637e01bc9fe4daef873709a7973e195ceba0a62bbc844"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4' and python_version < '4.0'",
             "version": "==1.26.7"
         },
         "webencodings": {

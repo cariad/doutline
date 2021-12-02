@@ -2,13 +2,16 @@
 
 **Doutline** is a Python package for generating document outlines.
 
-- [📑 Doutline](#-doutline)
-  - [Installation](#installation)
-  - [Project](#project)
-    - [Contributing](#contributing)
-    - [Licence](#licence)
-    - [Author](#author)
-    - [Acknowledgements](#acknowledgements)
+- [Installation](#installation)
+- [Generating an outline](#generating-an-outline)
+- [Writing an outline](#writing-an-outline)
+  - [Writing HTML](#writing-html)
+  - [Writing Markdown](#writing-markdown)
+- [Project](#project)
+  - [Contributing](#contributing)
+  - [Licence](#licence)
+  - [Author](#author)
+  - [Acknowledgements](#acknowledgements)
 
 ## Installation
 
@@ -19,6 +22,231 @@ Install Doutline via pip:
 ```bash
 pip install doutline
 ```
+
+## Generating an outline
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+- Title
+  - First Heading
+  - Second Heading
+    - Child of Second Heading
+  - Third Heading
+    - Child of Third Heading
+      - Grandchild of Third Heading
+```
+
+<!--edition-exec range=end-->
+
+## Writing an outline
+
+
+### Writing HTML
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+<nav class="toc"><li>Title<ol><li>First Heading</li><li>Second Heading<ol><li>Child of Second Heading</li></ol></li><li>Third Heading<ol><li>Child of Third Heading<ol><li>Grandchild of Third Heading</li></ol></li></ol></li></ol></li></nav>
+```
+
+<!--edition-exec range=end-->
+
+You can restrict the outline to a range by setting the `hi` and `lo` arguments:
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer, hi=1, lo=2)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+<nav class="toc"><ol><li>First Heading</li><li>Second Heading<ol><li>Child of Second Heading</li></ol></li><li>Third Heading<ol><li>Child of Third Heading</li></ol></li></ol></nav>
+```
+
+<!--edition-exec range=end-->
+
+The renderer can also emit hyperlinks when enabled:
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer, hyperlinks=True)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+<nav class="toc"><li><a href="#title">Title</a><ol><li><a href="#first-heading">First Heading</a></li><li><a href="#second-heading">Second Heading</a><ol><li><a href="#child-of-second-heading">Child of Second Heading</a></li></ol></li><li><a href="#third-heading">Third Heading</a><ol><li><a href="#child-of-third-heading">Child of Third Heading</a><ol><li><a href="#grandchild-of-third-heading">Grandchild of Third Heading</a></li></ol></li></ol></li></ol></li></nav>
+```
+
+<!--edition-exec range=end-->
+
+
+
+
+
+
+
+
+### Writing Markdown
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+- Title
+  - First Heading
+  - Second Heading
+    - Child of Second Heading
+  - Third Heading
+    - Child of Third Heading
+      - Grandchild of Third Heading
+```
+
+<!--edition-exec range=end-->
+
+You can restrict the outline to a range by setting the `hi` and `lo` arguments:
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer, hi=1, lo=2)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+- First Heading
+- Second Heading
+  - Child of Second Heading
+- Third Heading
+  - Child of Third Heading
+```
+
+<!--edition-exec range=end-->
+
+The renderer can also emit hyperlinks when enabled:
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer, hyperlinks=True)
+print(writer.getvalue())
+```
+
+<!--edition-exec as=markdown fence=backticks host=shell range=start-->
+
+```text
+- [Title](#title)
+  - [First Heading](#first-heading)
+  - [Second Heading](#second-heading)
+    - [Child of Second Heading](#child-of-second-heading)
+  - [Third Heading](#third-heading)
+    - [Child of Third Heading](#child-of-third-heading)
+      - [Grandchild of Third Heading](#grandchild-of-third-heading)
+```
+
+<!--edition-exec range=end-->
+
+
+
+
 
 ## Project
 

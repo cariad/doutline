@@ -8,7 +8,7 @@ title: Doutline
 
 **Doutline** is a Python package for generating document outlines.
 
-<edition value="toc" />
+<edition value="toc" hi="2" />
 
 ## Installation
 
@@ -19,6 +19,167 @@ Install Doutline via pip:
 ```bash
 pip install doutline
 ```
+
+## Generating an outline
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+## Writing an outline
+
+
+### Writing HTML
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+You can restrict the outline to a range by setting the `hi` and `lo` arguments:
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer, hi=1, lo=2)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+The renderer can also emit hyperlinks when enabled:
+
+```python
+from doutline import OutlineNode, render_html
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_html(root, writer, hyperlinks=True)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+
+
+
+
+
+
+
+### Writing Markdown
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+You can restrict the outline to a range by setting the `hi` and `lo` arguments:
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer, hi=1, lo=2)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+The renderer can also emit hyperlinks when enabled:
+
+```python
+from doutline import OutlineNode, render_markdown
+from io import StringIO
+
+root = OutlineNode(0, "Title")
+root.append(1, "First Heading")
+root.append(1, "Second Heading")
+root.append(2, "Child of Second Heading")
+root.append(1, "Third Heading")
+root.append(2, "Child of Third Heading")
+root.append(3, "Grandchild of Third Heading")
+
+writer = StringIO()
+render_markdown(root, writer, hyperlinks=True)
+print(writer.getvalue())
+```
+
+<!--edition-exec-->
+
+
+
+
 
 ## Project
 

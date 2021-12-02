@@ -41,6 +41,7 @@ h3,
 h4,
 h5,
 h6,
+img,
 ol,
 p,
 ul {
@@ -137,6 +138,18 @@ blockquote {
   padding-left: 1rem;
 }
 
+img,
+a > code,
+h2 > code,
+h3 > code,
+h4 > code,
+h5 > code,
+h6 > code,
+li > code,
+p > code {
+  border-radius: 0.3em;
+}
+
 a > code,
 h2 > code,
 h3 > code,
@@ -146,7 +159,6 @@ h6 > code,
 li > code,
 p > code {
   background: var(--accent);
-  border-radius: 0.3em;
 
   letter-spacing: 0.04em;
 
@@ -345,12 +357,174 @@ h2, h3, h4, h5, h6 {
     <article>
         <h1>📑 Doutline</h1>
 <p><strong>Doutline</strong> is a Python package for generating document outlines.</p>
-<p><nav class="toc"><ol><li><a href="#-doutline">📑 Doutline</a><ol><li><a href="#installation">Installation</a></li><li><a href="#project">Project</a><ol><li><a href="#contributing">Contributing</a></li><li><a href="#licence">Licence</a></li><li><a href="#author">Author</a></li><li><a href="#acknowledgements">Acknowledgements</a></li></ol></li></ol></li></ol></nav></p>
+<p><nav class="toc"><ol><li><a href="#installation">Installation</a></li><li><a href="#generating-an-outline">Generating an outline</a></li><li><a href="#writing-an-outline">Writing an outline</a><ol><li><a href="#writing-html">Writing HTML</a></li><li><a href="#writing-markdown">Writing Markdown</a></li></ol></li><li><a href="#project">Project</a><ol><li><a href="#contributing">Contributing</a></li><li><a href="#licence">Licence</a></li><li><a href="#author">Author</a></li><li><a href="#acknowledgements">Acknowledgements</a></li></ol></li></ol></nav></p>
 <h2>Installation<a id="installation"></a></h2>
 <p>Doutline requires Python 3.8 or later.</p>
 <p>Install Doutline via pip:</p>
 <div class="highlight"><pre><span></span>pip install doutline
 </pre></div>
+
+<h2>Generating an outline<a id="generating-an-outline"></a></h2>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_markdown</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_markdown</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code">- Title<br />  - First Heading<br />  - Second Heading<br />    - Child of Second Heading<br />  - Third Heading<br />    - Child of Third Heading<br />      - Grandchild of Third Heading<br /></code></pre>
+
+
+
+<h2>Writing an outline<a id="writing-an-outline"></a></h2>
+<h3>Writing HTML<a id="writing-html"></a></h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_html</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_html</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code"><nav class="toc"><li>Title<ol><li>First Heading</li><li>Second Heading<ol><li>Child of Second Heading</li></ol></li><li>Third Heading<ol><li>Child of Third Heading<ol><li>Grandchild of Third Heading</li></ol></li></ol></li></ol></li></nav><br /></code></pre>
+
+
+
+<p>You can restrict the outline to a range by setting the <code>hi</code> and <code>lo</code> arguments:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_html</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_html</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code"><nav class="toc"><ol><li>First Heading</li><li>Second Heading<ol><li>Child of Second Heading</li></ol></li><li>Third Heading<ol><li>Child of Third Heading</li></ol></li></ol></nav><br /></code></pre>
+
+
+
+<p>The renderer can also emit hyperlinks when enabled:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_html</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_html</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">hyperlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code"><nav class="toc"><li><a href="#title">Title</a><ol><li><a href="#first-heading">First Heading</a></li><li><a href="#second-heading">Second Heading</a><ol><li><a href="#child-of-second-heading">Child of Second Heading</a></li></ol></li><li><a href="#third-heading">Third Heading</a><ol><li><a href="#child-of-third-heading">Child of Third Heading</a><ol><li><a href="#grandchild-of-third-heading">Grandchild of Third Heading</a></li></ol></li></ol></li></ol></li></nav><br /></code></pre>
+
+
+
+<h3>Writing Markdown<a id="writing-markdown"></a></h3>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_markdown</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_markdown</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code">- Title<br />  - First Heading<br />  - Second Heading<br />    - Child of Second Heading<br />  - Third Heading<br />    - Child of Third Heading<br />      - Grandchild of Third Heading<br /></code></pre>
+
+
+
+<p>You can restrict the outline to a range by setting the <code>hi</code> and <code>lo</code> arguments:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_markdown</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_markdown</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">hi</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">lo</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code">- First Heading<br />- Second Heading<br />  - Child of Second Heading<br />- Third Heading<br />  - Child of Third Heading<br /></code></pre>
+
+
+
+<p>The renderer can also emit hyperlinks when enabled:</p>
+<div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">doutline</span> <span class="kn">import</span> <span class="n">OutlineNode</span><span class="p">,</span> <span class="n">render_markdown</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">StringIO</span>
+
+<span class="n">root</span> <span class="o">=</span> <span class="n">OutlineNode</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">"Title"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"First Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Second Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">"Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">"Child of Third Heading"</span><span class="p">)</span>
+<span class="n">root</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="s2">"Grandchild of Third Heading"</span><span class="p">)</span>
+
+<span class="n">writer</span> <span class="o">=</span> <span class="n">StringIO</span><span class="p">()</span>
+<span class="n">render_markdown</span><span class="p">(</span><span class="n">root</span><span class="p">,</span> <span class="n">writer</span><span class="p">,</span> <span class="n">hyperlinks</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">writer</span><span class="o">.</span><span class="n">getvalue</span><span class="p">())</span>
+</pre></div>
+
+
+
+<pre class="nohighlight thtml"><code class="thtml-code">- [Title](#title)<br />  - [First Heading](#first-heading)<br />  - [Second Heading](#second-heading)<br />    - [Child of Second Heading](#child-of-second-heading)<br />  - [Third Heading](#third-heading)<br />    - [Child of Third Heading](#child-of-third-heading)<br />      - [Grandchild of Third Heading](#grandchild-of-third-heading)<br /></code></pre>
+
+
 
 <h2>Project<a id="project"></a></h2>
 <h3>Contributing<a id="contributing"></a></h3>

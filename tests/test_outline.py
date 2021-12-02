@@ -9,25 +9,6 @@ basicConfig(level="DEBUG")
 getLogger("doutline").setLevel("DEBUG")
 
 
-def test_eq__children_mismatch() -> None:
-    a = OutlineNode(0, "foo")
-    b = OutlineNode(0, "foo")
-    b.append(1, "child")
-    assert a != b
-
-
-def test_eq__data_mismatch() -> None:
-    assert OutlineNode(0, "foo") != OutlineNode(0, "bar")
-
-
-def test_eq__level_mismatch() -> None:
-    assert OutlineNode(0, "foo") != OutlineNode(1, "foo")
-
-
-def test_eq__type_mismatch() -> None:
-    assert OutlineNode(0, "foo") != ""
-
-
 def test_append() -> None:
     root = OutlineNode[str]()
     root.append(0, "0")
@@ -50,6 +31,29 @@ def test_append__last_has_no_level() -> None:
         root.append(0, "0")
     expect = "OutlineNode has no index: OutlineNode()"
     assert str(ex.value) == expect
+
+
+def test_eq__children_mismatch() -> None:
+    a = OutlineNode(0, "foo")
+    b = OutlineNode(0, "foo")
+    b.append(1, "child")
+    assert a != b
+
+
+def test_eq__data_mismatch() -> None:
+    assert OutlineNode(0, "foo") != OutlineNode(0, "bar")
+
+
+def test_eq__level_mismatch() -> None:
+    assert OutlineNode(0, "foo") != OutlineNode(1, "foo")
+
+
+def test_eq__type_mismatch() -> None:
+    assert OutlineNode(0, "foo") != ""
+
+
+def test_in_range() -> None:
+    assert not OutlineNode().in_range(0, 6)
 
 
 @mark.parametrize(

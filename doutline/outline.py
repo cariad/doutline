@@ -74,13 +74,16 @@ class OutlineNode(Generic[TData]):
         body = ", ".join(parts)
         return f"{self.__class__.__name__}({body})"
 
-    def append(self, level: int, data: TData) -> None:
+    def append(self, level: int, data: TData) -> "OutlineNode[TData]":
         """
         Appends an item to the outline.
 
         Arguments:
             level: Level to add the item at.
             data:  Item data.
+
+        Returns:
+            New node.
 
         Raises:
             LevelTooHighError: If the new item is too high in the hierarchy to
@@ -93,8 +96,9 @@ class OutlineNode(Generic[TData]):
             raise LevelTooHighError(self.level, level)
 
         if not self.children:
-            self.children.append(OutlineNode[TData](level=level, data=data))
-            return
+            node = OutlineNode[TData](level=level, data=data)
+            self.children.append(node)
+            return node
 
         last = self.children[-1]
 
@@ -102,9 +106,11 @@ class OutlineNode(Generic[TData]):
             raise NoLevelError(last)
 
         if level > last.level:
-            last.append(level=level, data=data)
-        else:
-            self.children.append(OutlineNode[TData](level=level, data=data))
+            return last.append(level=level, data=data)
+
+        node = OutlineNode[TData](level=level, data=data)
+        self.children.append(node)
+        return node
 
     @property
     def children(self) -> List["OutlineNode[TData]"]:
